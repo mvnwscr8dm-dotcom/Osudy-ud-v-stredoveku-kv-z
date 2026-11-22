@@ -1,0 +1,783 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Osudy stredoveku</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@700;900&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+<style>
+/* Concept: a chronicle page. One ruled column, roman numerals as the step marks, gold hairlines; the time jump is the single bold moment. */
+:root{
+  --ground:#E8EBE4; --surface:#F5F7F2; --ink:#17262B; --ink-soft:#485A5F; --line:#C4CCC2;
+  --lapis:#2A4D9B; --on-lapis:#FFFFFF; --gold:#8F6A17; --gold-line:#C9A455;
+  --c-o:#B4432F; --c-m:#2A4D9B; --c-d:#2B7A52; --c-v:#7B4EA3; --c-t:#9A6F12;
+  --f-display:"Alegreya SC",Georgia,"Times New Roman",serif;
+  --f-body:"Alegreya Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1B20; --surface:#162830; --ink:#E6EAE3; --ink-soft:#9FB2B5; --line:#2B414A;
+    --lapis:#8FADEB; --on-lapis:#0F1B20; --gold:#E0B85A; --gold-line:#7A6430;
+    --c-o:#E88268; --c-m:#8FADEB; --c-d:#6FC49A; --c-v:#BE9AE0; --c-t:#E0B85A;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1B20; --surface:#162830; --ink:#E6EAE3; --ink-soft:#9FB2B5; --line:#2B414A;
+  --lapis:#8FADEB; --on-lapis:#0F1B20; --gold:#E0B85A; --gold-line:#7A6430;
+  --c-o:#E88268; --c-m:#8FADEB; --c-d:#6FC49A; --c-v:#BE9AE0; --c-t:#E0B85A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font:400 17px/1.5 var(--f-body)}
+.shell{max-width:680px;margin:0 auto;padding-block:18px 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--lapis)}
+:focus-visible{outline:3px solid var(--lapis);outline-offset:2px}
+button{font:inherit;color:inherit;cursor:pointer}
+h1,h2,h3{font-family:var(--f-display);font-weight:900;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.3rem,9vw,3.4rem);letter-spacing:.01em}
+h2{font-size:clamp(1.6rem,6vw,2.1rem)}
+h3{font-size:1.2rem;letter-spacing:.03em}
+p{margin:0}
+.muted{color:var(--ink-soft)}
+.eyebrow{font:700 .8rem/1.2 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--gold-line);margin-bottom:26px}
+.brand{font:900 1.15rem var(--f-display);letter-spacing:.05em;color:var(--ink);text-decoration:none}
+.tlink{font-size:.95rem}
+.sec{display:grid;gap:22px}
+.lead{font-size:1.15rem;max-width:58ch}
+
+fieldset{border:0;margin:0;padding:0;min-width:0;display:grid;gap:10px}
+fieldset[disabled]{opacity:.5}
+legend{padding:0;margin-bottom:8px;font:700 .85rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pick input{position:absolute;opacity:0;width:1px;height:1px}
+.pick{position:relative;display:block}
+.pick .card{display:grid;gap:2px;padding:16px 14px;min-height:76px;align-content:center;background:var(--surface);border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.pick .card b{font:900 1.25rem var(--f-display);letter-spacing:.03em}
+.pick .card span{font-size:.92rem;color:var(--ink-soft)}
+.pick input:checked + .card{border-color:var(--lapis);box-shadow:inset 0 0 0 2px var(--lapis)}
+.pick input:focus-visible + .card{outline:3px solid var(--lapis);outline-offset:2px}
+.field{display:grid;gap:6px}
+.field label{font-weight:700}
+.field input,.field textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;width:100%}
+.field textarea{min-height:120px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px 22px;border-radius:6px;border:1px solid var(--lapis);background:var(--lapis);color:var(--on-lapis);font-weight:700;letter-spacing:.02em}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--lapis)}
+.btn.small{min-height:40px;padding:6px 14px;font-size:.95rem}
+
+/* travel */
+.travel{text-align:center;justify-items:center;padding-top:10px}
+.year{font:900 clamp(4.2rem,24vw,7.5rem)/1 var(--f-display);font-variant-numeric:tabular-nums;color:var(--gold);letter-spacing:.02em}
+.era{font:700 .9rem var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+.badge{display:inline-block;padding:4px 12px;border:1px solid var(--gold-line);border-radius:999px;font-weight:700;font-size:.9rem}
+.reveal{animation:rise .7s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.reveal{animation:none}}
+
+/* questions */
+.prog{display:grid;gap:8px}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline}
+.roman{font:900 1.6rem var(--f-display);color:var(--gold);letter-spacing:.04em}
+.track{display:grid;grid-template-columns:repeat(15,1fr);gap:3px}
+.track i{height:5px;border-radius:2px;background:var(--line)}
+.track i.done{background:var(--gold)}
+.track i.now{background:var(--lapis)}
+.qtext{font:500 1.35rem/1.3 var(--f-body);text-wrap:balance}
+.opts{display:grid;gap:10px}
+.opt{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;text-align:left;width:100%;min-height:60px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.opt:hover{border-color:var(--lapis)}
+.opt .l{display:grid;place-items:center;width:30px;height:30px;border-radius:4px;border:1px solid var(--gold-line);font:900 .95rem var(--f-display);color:var(--gold)}
+.opt.chosen{border-color:var(--lapis);box-shadow:inset 0 0 0 2px var(--lapis)}
+
+/* result */
+.who{font:900 clamp(2.2rem,9vw,3.3rem)/1.05 var(--f-display);text-wrap:balance}
+.meta{color:var(--ink-soft)}
+.block{display:grid;gap:8px;padding-top:16px;border-top:1px solid var(--gold-line)}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:minmax(92px,128px) 1fr 44px;gap:10px;align-items:center;font-size:.98rem}
+.bar .tr{height:10px;border-radius:2px;background:var(--line);overflow:hidden}
+.bar .tr b{display:block;height:100%;background:var(--c);width:0}
+.bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.bar[data-t="O"]{--c:var(--c-o)}.bar[data-t="M"]{--c:var(--c-m)}.bar[data-t="D"]{--c:var(--c-d)}
+.bar[data-t="V"]{--c:var(--c-v)}.bar[data-t="T"]{--c:var(--c-t)}
+.chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.8rem;font-weight:700;border:1px solid var(--c);color:var(--ink)}
+.chip[data-t="O"]{--c:var(--c-o)}.chip[data-t="M"]{--c:var(--c-m)}.chip[data-t="D"]{--c:var(--c-d)}
+.chip[data-t="V"]{--c:var(--c-v)}.chip[data-t="T"]{--c:var(--c-t)}
+.fb{display:flex;gap:10px;flex-wrap:wrap}
+.fb .btn{flex:1 1 150px}
+.fb .btn.on{background:var(--lapis);color:var(--on-lapis)}
+.code{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.code code{flex:1 1 220px;min-width:0;overflow-wrap:anywhere;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;font-size:.92rem}
+
+/* teacher */
+.qrwrap{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.qrbox{background:#fff;padding:14px;border-radius:6px;display:inline-block;min-width:120px;min-height:120px;color:#222}
+.qrbox img,.qrbox canvas{display:block;max-width:100%;height:auto}
+.demo{padding:10px 14px;border:1px dashed var(--gold-line);border-radius:6px;color:var(--ink-soft)}
+.rows{display:grid;gap:8px}
+.rowline{display:grid;grid-template-columns:minmax(120px,1fr) 2fr 70px;gap:10px;align-items:center}
+.rowline .tr{height:10px;border-radius:2px;background:var(--line);overflow:hidden}
+.rowline .tr b{display:block;height:100%;background:var(--lapis)}
+.rowline .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+details{border-top:1px solid var(--line);padding:10px 0}
+summary{cursor:pointer;font-weight:700}
+.qrow{display:grid;grid-template-columns:1fr;gap:4px;margin-top:10px}
+.qrow .t{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.foot{margin-top:40px;padding-top:12px;border-top:1px solid var(--line);font-size:.9rem;color:var(--ink-soft)}
+ol.disc{margin:0;padding-left:1.2rem;display:grid;gap:8px}
+@media (max-width:480px){
+  .bar{grid-template-columns:92px 1fr 40px}
+  .rowline{grid-template-columns:1fr 70px}
+  .rowline .tr{grid-column:1 / -1;order:3}
+}
+</style>
+
+<div class="shell">
+  <header class="top">
+    <a class="brand" href="#" id="brand">Osudy stredoveku</a>
+    <a class="tlink" href="#ucitel" id="tlink">Pre učiteľa</a>
+  </header>
+
+  <main>
+    <!-- 1. Štart -->
+    <section class="sec" id="s-start">
+      <div class="sec" style="gap:12px">
+        <p class="eyebrow">Stredoveké Slovensko · 9. – 15. storočie</p>
+        <h1>Osudy stredoveku</h1>
+        <p class="lead">Presuň sa do stredoveku na území dnešného Slovenska. Čaká ťa pätnásť rozhodnutí a na konci zistíš, ktorej skutočnej osobnosti sa tvoj príbeh podobá.</p>
+      </div>
+      <fieldset id="fs-gender">
+        <legend>Prvé rozhodnutie</legend>
+        <div class="pair">
+          <label class="pick"><input type="radio" name="gender" value="m"><span class="card"><b>Muž</b><span>Vstúpiš do príbehu ako muž.</span></span></label>
+          <label class="pick"><input type="radio" name="gender" value="f"><span class="card"><b>Žena</b><span>Vstúpiš do príbehu ako žena.</span></span></label>
+        </div>
+      </fieldset>
+      <fieldset id="fs-status" disabled>
+        <legend>Druhé rozhodnutie</legend>
+        <div class="pair">
+          <label class="pick"><input type="radio" name="status" value="r"><span class="card"><b id="lab-r">Panovník</b><span>Tvoje slovo rozhodne o osude celej krajiny.</span></span></label>
+          <label class="pick"><input type="radio" name="status" value="c"><span class="card"><b id="lab-c">Obyčajný človek</b><span>Síce nepatríš medzi elitnú šľachtu, no vďaka tvojim rozhodnutiam sa môžeš stať legendou.</span></span></label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="nick">Prezývka (nepovinné)</label>
+        <input id="nick" type="text" maxlength="14" autocomplete="off" placeholder="napr. Adam K.">
+        <span class="muted" style="font-size:.9rem">Prezývku uvidí iba učiteľ vo svojom prehľade.</span>
+      </div>
+      <div><button class="btn" id="go" disabled>Presunúť sa v čase</button></div>
+    </section>
+
+    <!-- 2. Presun v čase -->
+    <section class="sec travel" id="s-travel" hidden>
+      <p class="era" id="tr-era">Presun v čase</p>
+      <div class="year" id="tr-year" aria-live="off">2026</div>
+      <span class="badge reveal" id="tr-badge"></span>
+      <p class="lead reveal" id="tr-text"></p>
+      <div><button class="btn" id="enter">Vstúpiť do príbehu</button></div>
+    </section>
+
+    <!-- 3. Otázky -->
+    <section class="sec" id="s-q" hidden>
+      <div class="prog">
+        <div class="prog-top"><span class="roman" id="q-roman">I</span><span class="muted" id="q-count">1 z 15</span></div>
+        <div class="track" id="q-track" aria-hidden="true"></div>
+      </div>
+      <p class="qtext" id="q-text"></p>
+      <div class="opts" id="q-opts"></div>
+    </section>
+
+    <!-- 4. Výsledok -->
+    <section class="sec" id="s-result" hidden>
+      <div class="sec" style="gap:8px">
+        <p class="eyebrow" id="r-eyebrow"></p>
+        <h2 class="who" id="r-name"></h2>
+        <p class="meta" id="r-meta"></p>
+      </div>
+      <div class="block">
+        <h3>Historická stopa</h3>
+        <p id="r-stopa"></p>
+      </div>
+      <div class="block">
+        <h3>Ako si sa rozhodoval(a)</h3>
+        <p id="r-tvoja"></p>
+        <div class="bars" id="r-bars" style="margin-top:8px"></div>
+      </div>
+      <div class="block">
+        <h3>Páčila sa ti táto aktivita?</h3>
+        <div class="fb">
+          <button class="btn ghost" id="fb-a">Páčila</button>
+          <button class="btn ghost" id="fb-n">Nepáčila</button>
+        </div>
+        <p class="muted" id="fb-note"></p>
+      </div>
+      <div class="block">
+        <h3>Kód pre učiteľa</h3>
+        <p class="muted">Ukáž tento kód učiteľovi alebo ho odošli podľa jeho pokynov. Obsahuje tvoje rozhodnutia.</p>
+        <div class="code"><code id="r-code"></code><button class="btn small ghost" id="copy">Kopírovať</button></div>
+        <p class="muted" id="copy-note"></p>
+      </div>
+      <div><button class="btn ghost" id="again">Zahrať znova</button></div>
+    </section>
+
+    <!-- 5. Učiteľ -->
+    <section class="sec" id="s-teacher" hidden>
+      <div class="sec" style="gap:8px">
+        <p class="eyebrow">Učiteľský pohľad</p>
+        <h2>Ako sa žiaci rozhodovali</h2>
+        <p class="muted">Žiaci si po dohraní zobrazia kód. Vložte kódy sem a uvidíte celkový obraz triedy.</p>
+      </div>
+
+      <div class="block">
+        <h3>Odkaz a QR kód pre žiakov</h3>
+        <div class="qrwrap">
+          <div class="qrbox" id="qrbox"></div>
+          <div class="field" style="flex:1 1 240px;min-width:0">
+            <label for="link">Odkaz na hru</label>
+            <input id="link" type="text" autocomplete="off" spellcheck="false">
+            <span class="muted" style="font-size:.9rem">Ak odkaz zmeníte, QR kód sa prekreslí. Odkaz musí byť zdieľaný tak, aby ho žiaci mohli otvoriť.</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+              <button class="btn small" id="qr-make">Prekresliť QR kód</button>
+              <button class="btn small ghost" id="qr-big">Väčší QR kód</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>Kódy od žiakov</h3>
+        <div class="field">
+          <label for="codes">Vložte kódy, každý na nový riadok</label>
+          <textarea id="codes" placeholder="v1.3.OMDVTOMDVTOMDVT.A.Eva" spellcheck="false"></textarea>
+        </div>
+        <p class="muted" id="codes-note"></p>
+      </div>
+
+      <div id="report" class="sec"></div>
+
+      <div class="block">
+        <h3>Otázky do diskusie</h3>
+        <ol class="disc">
+          <li>Ktoré rozhodnutie bolo najťažšie a prečo? Čo by ste urobili inak?</li>
+          <li>Prečo sa niektoré možnosti volili častejšie? Čo žiaci považovali za „bezpečné“ rozhodnutie?</li>
+          <li>V čom sa osudy panovníkov líšili od osudov obyčajných ľudí? Čo mali spoločné?</li>
+          <li>Ktorá osobnosť vám vyšla? Ktorý historický fakt o nej vás prekvapil?</li>
+          <li>V stredoveku nebola jedna „správna“ odpoveď. Aké následky mala odvaha, dohoda alebo viera? Nájdite príklad.</li>
+        </ol>
+      </div>
+
+      <details>
+        <summary>O zdrojoch a zjednodušeniach</summary>
+        <p class="muted" style="margin-top:8px">Osobnosti sú priradené podľa prevládajúcej vlastnosti vybraných rozhodnutí, nie podľa skutočného životopisu žiaka. Stručné opisy sú zjednodušené pre výučbu. Údaje o ženách z neskorého stredoveku vychádzajú z odborných štúdií, napríklad <a href="https://www.sav.sk/journals/uploads/01261105Tih%C3%A1nyiov%C3%A1.pdf" target="_blank" rel="noopener">štúdie o písomnostiach stredovekých žien</a> a <a href="https://www.ceeol.com/search/chapter-detail?id=596112" target="_blank" rel="noopener">štúdie o štyroch ženách neskorého stredoveku</a>. Pri týchto osobnostiach sú zachované len útržky životopisu, preto pri nich nie sú uvedené presné roky. Majstra Pavla z Levoče stručne opisuje aj <a href="https://en.wikipedia.org/wiki/Master_Paul_of_Levo%C4%8Da" target="_blank" rel="noopener">Wikipédia</a>.</p>
+      </details>
+      <div><a class="btn ghost" href="#">Späť na hru</a></div>
+    </section>
+  </main>
+
+  <footer class="foot">Výučbová hra o stredovekom Slovensku. Rozhodnutia nemajú „správnu“ odpoveď.</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+"use strict";
+var DEFAULT_LINK = "https://claude.ai/artifact/1P2MFBLhjSoxDv5F6VHH9H";
+var TR = ["O","M","D","V","T"];
+var TN = {O:"Odvaha",M:"Múdrosť",D:"Dohoda",V:"Viera",T:"Vytrvalosť"};
+var TL = {O:"odvaha",M:"múdrosť",D:"dohoda",V:"viera",T:"vytrvalosť"};
+var ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV"];
+var NQ = 15;
+
+/* ---------- Otázky: každá možnosť má skrytú vlastnosť ---------- */
+var Q = {
+r:[
+{s:"Tvoj predchodca zomrel a vládu preberáš ty. Hneď prvé ráno sa poradcovia hádajú, čo treba urobiť ako prvé. Čo urobíš?",o:[
+ {t:"O",x:"Postaviť sa pred všetkých a jasne povedať, že vládu držíš ty."},
+ {t:"M",x:"Nechať si od poradcov vysvetliť, v akom stave krajina naozaj je."},
+ {t:"D",x:"Pozvať najvplyvnejšie rody na večeru a získať ich na svoju stranu."},
+ {t:"V",x:"Ísť do kostola a prosiť o silu a múdrosť pre vládu."}]},
+{s:"Správa o novom vládcovi sa rozšírila. Zo susedného kráľovstva príde posol s darmi a chce s tebou hovoriť osamote. Čo urobíš?",o:[
+ {t:"O",x:"Prijať ho hneď a bez stráží, aby bolo jasné, že sa nebojíš."},
+ {t:"M",x:"Najprv zistiť od poradcov, čo by za tým mohlo byť."},
+ {t:"D",x:"Prijať ho s úctou a odvďačiť sa darmi."},
+ {t:"V",x:"Najprv dať odslúžiť omšu a až potom ho prijať."}]},
+{s:"Posol odišiel, no leto je suché a úroda zlá. Zásoby na zimu nebudú stačiť pre celú krajinu. Čo urobíš?",o:[
+ {t:"O",x:"Osobne viesť výpravu po obilie cez neistú cestu do iného kraja."},
+ {t:"M",x:"Dať spočítať všetky zásoby a rozdeliť ich podľa toho, kto ich najviac potrebuje."},
+ {t:"D",x:"Dohodnúť sa so susedom, ktorého posol ťa navštívil, na výmene obilia za iný tovar."},
+ {t:"T",x:"Zmenšiť dvor a skromnejšie hodovať, kým kríza neskončí."}]},
+{s:"Počas hladu sa dvaja šľachtici pohádajú o pole pri rieke, kde sa ešte dá zasiať. Obaja chcú, aby si rozhodol v ich prospech. Čo urobíš?",o:[
+ {t:"O",x:"Rozhodnúť hneď a pred celým dvorom."},
+ {t:"D",x:"Pozvať oboch k jednému stolu a hľadať dohodu."},
+ {t:"V",x:"Dať ich prisahať v kostole, že hovoria pravdu, a rozhodnúť podľa toho."},
+ {t:"T",x:"Prejsť pole, vypočuť aj ľudí, ktorí na ňom pracujú, a rozhodnúť až potom."}]},
+{s:"Hlad pominul, ale hradby tvojho hlavného hradu praskajú a ich oprava bude drahá. Ako ju zariadiš?",o:[
+ {t:"O",x:"Opraviť najprv tú časť, odkiaľ hrozí útok, aj za cenu vyšších daní."},
+ {t:"M",x:"Pozvať staviteľa zo vzdialeného mesta, ktorý pozná lepšie postupy."},
+ {t:"V",x:"Dať stavbu požehnať a pridať kaplnku, aby sa robotníci cítili chránení."},
+ {t:"T",x:"Rozložiť opravu na viac rokov a zapojiť do nej celý kraj."}]},
+{s:"Pri stavbe sa objaví učený mních, ktorý vie čítať, písať aj počítať ako málokto v krajine. Čo s ním urobíš?",o:[
+ {t:"M",x:"Zriadiť pri dvore školu a nechať ho učiť."},
+ {t:"D",x:"Využiť ho na písanie listov pre cudzie dvory."},
+ {t:"V",x:"Pozvať ho do kláštora, aby sa tam spoločne modlili za krajinu."},
+ {t:"T",x:"Nechať ho prepisovať knihy, aby sa zachovali pre ďalšie generácie."}]},
+{s:"Plynú roky. Jedného dňa príde správa od hraničnej stráže: pri hraniciach sa zhromaždila cudzia ozbrojená družina. Čo urobíš?",o:[
+ {t:"O",x:"Vyraziť im naproti na čele vojska."},
+ {t:"M",x:"Najprv poslať zvedov, aby zistili, koľko ich je a čo chcú."},
+ {t:"D",x:"Poslať vyslanca s pozvaním veliteľa na rozhovor."},
+ {t:"V",x:"Vyhlásiť pôst a modlitby za ochranu krajiny."}]},
+{s:"Nebezpečenstvo sa podarilo zažehnať. Susedný vládca ti ponúka, že vaše rody spojí svadba, aby medzi vami zostal trvalý pokoj. Čo odpovieš?",o:[
+ {t:"O",x:"Odmietnuť a spoliehať sa len na vlastné sily."},
+ {t:"M",x:"Dať si preveriť majetok a minulosť toho rodu."},
+ {t:"D",x:"Prijať ponuku a vyjednať si dobré podmienky."},
+ {t:"T",x:"Neponáhľať sa a sledovať, ako sa ten rod zachová v ťažkých časoch."}]},
+{s:"Pred svadbou sa v meste začne šíriť nákazlivá choroba. Ľudia sa boja a zatvárajú sa doma. Čo urobíš?",o:[
+ {t:"O",x:"Navštíviť postihnutú štvrť, aby ľudia nestratili odvahu."},
+ {t:"D",x:"Zvolať radu mesta a spolu s mešťanmi určiť pravidlá."},
+ {t:"V",x:"Nariadiť procesie a modlitby a pomáhať chorým."},
+ {t:"T",x:"Zorganizovať dlhodobú pomoc: jedlo, ošetrovanie a zásoby."}]},
+{s:"Počas choroby sa dozvieš, že niekto z tvojho dvora tajne posiela správy cudzincom. Čo urobíš?",o:[
+ {t:"O",x:"Postaviť ho pred dvor a žiadať vysvetlenie."},
+ {t:"M",x:"Nechať ho sledovať a zhromaždiť dôkazy."},
+ {t:"V",x:"Dať mu možnosť priznať sa a verejne sa ospravedlniť."},
+ {t:"T",x:"Vypočuť všetkých, čo ho poznajú, a rozhodnúť neskôr."}]},
+{s:"Choroba ustúpi a krajina sa spamätáva. Do mesta prídu obchodníci a ponúkajú vzácny tovar výmenou za právo vyberať clo na ceste. Čo odpovieš?",o:[
+ {t:"M",x:"Dať spočítať, čo by clo prinieslo, a podľa toho rozhodnúť."},
+ {t:"D",x:"Vyjednať podmienky, ktoré budú výhodné pre obe strany."},
+ {t:"V",x:"Časť zisku venovať chudobným a kláštorom."},
+ {t:"T",x:"Povoliť obchod najprv na skúšku na jeden rok."}]},
+{s:"Obchod sa rozbehne, no ľudia sú po ťažkých rokoch vyčerpaní a žiadajú nižšie dane. Čo urobíš?",o:[
+ {t:"O",x:"Odmietnuť. Úľavu si zaslúži len ten, kto slúži krajine."},
+ {t:"M",x:"Prepočítať príjmy a vyhlásiť jasné pravidlá, koľko sa môže ubrať."},
+ {t:"D",x:"Zvolať zástupcov ľudí a dohodnúť kompromis."},
+ {t:"V",x:"Znížiť dane na sviatky ako milodar pre ľud."}]},
+{s:"Mladý šľachtic z významného rodu v kraji žiada vlastnú družinu vojakov. Čo urobíš?",o:[
+ {t:"O",x:"Dať mu družinu a poslať ho strážiť hranicu."},
+ {t:"M",x:"Najprv ho dať preskúšať a vycvičiť."},
+ {t:"D",x:"Získať jeho rod za spojenca pri budúcich sporoch."},
+ {t:"T",x:"Pridať ho na pár rokov ku skúsenému veliteľovi."}]},
+{s:"Silnejší vládca z ďalekej krajiny ti ponúka ochranu pred nepriateľmi výmenou za ročný poplatok. Čo odpovieš?",o:[
+ {t:"M",x:"Spočítať, čo by krajina získala a čo stratila, a až potom odpovedať."},
+ {t:"D",x:"Prijať, ale rozhodovanie nechať vo vlastných rukách."},
+ {t:"V",x:"Poradiť sa s biskupom a rozhodnúť podľa svedomia."},
+ {t:"T",x:"Odmietnuť a ďalej budovať vlastné sily."}]},
+{s:"Roky plynú a tvoja vláda sa blíži ku koncu. Treba určiť nástupcu, ktorý po tebe prevezme krajinu. Ako ho pripravíš?",o:[
+ {t:"O",x:"Vychovávať ho tvrdo, aby vedel čeliť nepriateľom."},
+ {t:"M",x:"Dať mu najlepšie vzdelanie, aj od cudzích učiteľov."},
+ {t:"V",x:"Zveriť jeho výchovu cirkvi, aby vyrástol v dobrom svedomí."},
+ {t:"T",x:"Trpezlivo ho pripravovať, aby po tebe zdedil pokojnú a stabilnú krajinu."}]}
+],
+c:[
+{s:"Na trhu v tvojej dedine sa šíria chýry, že sa blíži vojna. Každý hovorí niečo iné. Čo urobíš?",o:[
+ {t:"O",x:"Pridať sa k ľuďom, ktorí chcú dedinu brániť."},
+ {t:"M",x:"Vypytovať sa skúsených ľudí a porovnať, čo je pravda."},
+ {t:"D",x:"Dohodnúť sa so susedmi, ako si navzájom pomôžete."},
+ {t:"V",x:"Ísť do kostola a modliť sa za ochranu."}]},
+{s:"Vojna našťastie neprišla, ale úroda je zlá a zásoby na zimu nebudú stačiť. Čo urobíš?",o:[
+ {t:"O",x:"Vydať sa na ťažkú cestu po obilie do vzdialeného kraja."},
+ {t:"M",x:"Spočítať zásoby a rozdeliť ich na každý deň."},
+ {t:"D",x:"Vymeniť časť zásob so susedmi za iný tovar."},
+ {t:"T",x:"Viac pracovať a menej jesť, kým to nepominie."}]},
+{s:"Zima je ťažká. Z mesta príde majster remeselník a ponúka ti miesto pomocníka v dielni. Čo odpovieš?",o:[
+ {t:"O",x:"Prijať hneď, hoci je budúcnosť neistá."},
+ {t:"D",x:"Dohodnúť sa, že ti zostane čas aj na vlastnú prácu."},
+ {t:"V",x:"Poďakovať a poradiť sa s farárom."},
+ {t:"T",x:"Pripraviť sa na dlhé roky učenia, hoci budú náročné."}]},
+{s:"V meste, kde pracuješ, začne úradník vyberať nový poplatok od všetkých. Čo urobíš?",o:[
+ {t:"O",x:"Odmietnuť platiť, kým sa nevysvetlí dôvod."},
+ {t:"M",x:"Pozrieť sa do listín, či je poplatok oprávnený."},
+ {t:"V",x:"Zaplatiť a pomodliť sa za svojich blízkych."},
+ {t:"T",x:"Zaplatiť a upraviť výdavky tak, aby domácnosť vydržala."}]},
+{s:"Do dielne príde pútnik s novinkami z ďalekých krajov. Je unavený a hladný. Čo urobíš?",o:[
+ {t:"M",x:"Vypytovať sa ho na cesty, jazyky a zvyky cudzích krajov."},
+ {t:"D",x:"Pozvať ho na večeru a spriateliť sa s ním."},
+ {t:"V",x:"Poprosiť ho, aby sa s tebou pomodlil, a vypočuť príbehy zo svätých miest."},
+ {t:"T",x:"Dať mu nocľah a zásoby na ďalšiu cestu."}]},
+{s:"Keď sa vrátiš do rodnej dediny, dvaja susedia sa práve hádajú o hranicu poľa. Obaja ťa prosia o pomoc. Čo urobíš?",o:[
+ {t:"O",x:"Postaviť sa medzi nich a zakročiť."},
+ {t:"M",x:"Nájsť svedkov, ktorí pamätajú pôvodnú hranicu."},
+ {t:"D",x:"Navrhnúť, aby sa dohodli pri spoločnom stole."},
+ {t:"V",x:"Požiadať oboch, aby sa zmierili pred oltárom."}]},
+{s:"Doma ochorie niekto z rodiny a treba liek, ktorý sa dá zohnať len vo vzdialenom meste. Čo urobíš?",o:[
+ {t:"O",x:"Vyraziť hneď, hoci je cesta nebezpečná."},
+ {t:"M",x:"Naplánovať trasu a poradiť sa s pocestnými."},
+ {t:"D",x:"Pridať sa k obchodníkom a ísť v ich družine."},
+ {t:"T",x:"Dôkladne sa pripraviť a vyraziť, keď bude cesta bezpečnejšia."}]},
+{s:"Liek zabral, ale po čase sa v okolí objaví choroba, ktorá sa šíri aj medzi susedmi. Čo urobíš?",o:[
+ {t:"O",x:"Ísť k chorým a pomáhať, hoci hrozí nákaza."},
+ {t:"D",x:"Dohodnúť sa s ostatnými, kto sa postará o ktorú rodinu."},
+ {t:"V",x:"Modliť sa a sľúbiť pútnickú cestu, ak choroba ustúpi."},
+ {t:"T",x:"Vydržať pri chorých a ošetrovať ich celé týždne."}]},
+{s:"Choroba ustúpi a v meste sa otvorí jarmok s trhom, zápasmi a hudbou. Čo budeš robiť?",o:[
+ {t:"O",x:"Zapojiť sa do zápasov."},
+ {t:"M",x:"Predávať premyslene podľa cien na ostatných stánkoch."},
+ {t:"V",x:"Začať deň omšou a poďakovať, že choroba ustúpila."},
+ {t:"T",x:"Pomáhať s prípravou a upratovaním pre všetkých."}]},
+{s:"Na jarmoku si ťa všimne zámožný pán a objedná si u teba prácu. Čaká výsledok a dobre platí. Čo urobíš?",o:[
+ {t:"M",x:"Zistiť, čo pán naozaj potrebuje, a ponúknuť vlastné nápady."},
+ {t:"D",x:"Dohodnúť cenu a podmienky ešte pred začatím."},
+ {t:"V",x:"Prvý výrobok venovať kostolu ako vďaku."},
+ {t:"T",x:"Prijať a pracovať, kým nebude všetko hotové."}]},
+{s:"Z peňazí za prácu si môžeš dovoliť viac. Sused ti ponúka spoločné podnikanie. Čo odpovieš?",o:[
+ {t:"O",x:"Súhlasiť a hneď vyraziť na trhy."},
+ {t:"M",x:"Dať dohodu spísať a posúdiť riziká."},
+ {t:"D",x:"Rokovať o podieloch a zisku."},
+ {t:"V",x:"Poprosiť kňaza o požehnanie spolupráce."}]},
+{s:"Podnikanie sa rozbehne. Príde za tebou mladý pocestný a prosí ťa, aby si ho učil. Čo urobíš?",o:[
+ {t:"O",x:"Vziať ho so sebou na nebezpečné cesty za obchodom."},
+ {t:"M",x:"Učiť ho čítať a rátať."},
+ {t:"D",x:"Predstaviť ho známym, ktorí mu pomôžu."},
+ {t:"T",x:"Dať mu stravu a strechu na zimu."}]},
+{s:"V meste vypukne požiar a plamene sa šíria z domu do domu. Čo urobíš?",o:[
+ {t:"M",x:"Nechať sa viesť skúsenými, ktorí vedia, ako zabrániť šíreniu ohňa."},
+ {t:"D",x:"Zorganizovať ľudí do radu s vedrami na vodu."},
+ {t:"V",x:"Prosiť svätých o pomoc a pomáhať s nosením vody."},
+ {t:"T",x:"Hasiť a potom pomáhať s obnovou domov."}]},
+{s:"Po požiari hľadá panstvo pomocníkov na veľkú stavbu, ktorá bude trvať roky. Čo urobíš?",o:[
+ {t:"O",x:"Prihlásiť sa na najnáročnejšiu a najnebezpečnejšiu časť."},
+ {t:"D",x:"Vyjednať si dobré podmienky a odmenu."},
+ {t:"V",x:"Zapojiť sa s vedomím, že sa stavia aj pre Boha."},
+ {t:"T",x:"Pracovať celé roky, kým nebude stavba hotová."}]},
+{s:"Roky ubehli a tvoj príbeh sa chýli ku koncu. Čo po sebe chceš zanechať?",o:[
+ {t:"O",x:"Príbeh o odvahe, ktorý sa bude rozprávať."},
+ {t:"M",x:"Zapísané poznatky, aby ich mohli čítať ďalší."},
+ {t:"V",x:"Dar pre kostol, aby sa na teba spomínalo."},
+ {t:"T",x:"Dom a pole pre ďalšie generácie."}]}
+]};
+
+/* ---------- Roly ---------- */
+var ROLE = {
+ 1:{label:"Muž · panovník",group:"r",text:"Si knieža alebo kráľ. Pod tebou sú hrady, vojaci a rozhodnutia, ktoré si ľudia budú pamätať."},
+ 2:{label:"Žena · panovníčka",group:"r",text:"Si kňažná alebo kráľovná. Tvoje slovo má váhu, no mnohí sa ťa snažia ovplyvniť."},
+ 3:{label:"Muž · obyčajný človek",group:"c",text:"Si obyčajný muž na stredovekom Slovensku. Nemáš korunu ani hrad, ale máš silné ruky a vlastnú hlavu. Hlad, jarmoky aj požiare zažiješ na vlastnej koži. Len od tvojich rozhodnutí závisí, či sa z teba stane majster, obchodník alebo človek, na ktorého sa bude spomínať."},
+ 4:{label:"Žena · obyčajná žena",group:"c",text:"Si obyčajná žena na stredovekom Slovensku. Nemáš korunu ani hrad, ale máš rozum, silu a vlastnú cestu. Hlad, jarmoky aj požiare zažiješ na vlastnej koži. Len od tvojich rozhodnutí závisí, či sa z teba stane majsterka, obchodníčka alebo žena, na ktorú sa bude spomínať."}
+};
+
+/* ---------- Osobnosti: 5 pre každú kategóriu ---------- */
+var P = {
+1:{
+ O:{n:"Svätopluk I.",y:"asi 840 – 894",r:"knieža Veľkej Moravy",s:"Za jeho vlády (870 – 894) bola Veľká Morava najväčšia a najmocnejšia. Podľa povesti dal svojim synom zväzok prútov. Jednotlivo sa dali ľahko zlomiť, pokope nie, a tak ich učil, že len spolu vydržia. Po jeho smrti sa štát rýchlo rozpadol."},
+ V:{n:"Rastislav",y:"vládol 846 – 870",r:"knieža Veľkej Moravy",s:"V roku 863 pozval z Byzancie bratov Konštantína a Metoda, aby učili ľudí v reči, ktorej rozumejú. Vďaka tomu sa u nás začalo používať slovanské písmo. Neskôr ho zajali Frankovia, dali ho oslepiť a zomrel vo väzení."},
+ D:{n:"Pribina",y:"asi 800 – 861",r:"knieža z Nitry",s:"Okolo roku 828 mu v Nitre posvätili kostol, ktorý je najstarším známym kresťanským kostolom u Slovanov. Neskôr musel z Nitry odísť, no vďaka dohode s franským kráľom dostal nové územie v Panónii pri dnešnom Balatone."},
+ T:{n:"Béla IV.",y:"1206 – 1270",r:"uhorský kráľ (vládol 1235 – 1270)",s:"Po vpáde Tatárov v rokoch 1241 – 1242 trpezlivo obnovoval spustošenú krajinu. Dal stavať pevné kamenné hrady, dával mestám výhody a pozýval nových osadníkov. Preto ho nazývajú druhým zakladateľom Uhorska."},
+ M:{n:"Matej Korvín",y:"1443 – 1490",r:"uhorský kráľ (vládol 1458 – 1490)",s:"Bol to vzdelaný kráľ. V roku 1465 založil v Bratislave (vtedy Prešporku) Academiu Istropolitanu, prvú univerzitu na našom území. Jeho knižnica patrila medzi najväčšie v Európe."}
+},
+2:{
+ O:{n:"Alžbeta Bosnianska",y:"1339 – 1387",r:"uhorská kráľovná",s:"Po smrti manžela Ľudovíta Veľkého (1382) viedla krajinu za svoju mladú dcéru Máriu. Šľachtici, ktorí s ňou nesúhlasili, ju v roku 1387 zajali a zavraždili. Jej osud ukazuje, aké nebezpečné bolo vládnuť v časoch bojov o moc."},
+ T:{n:"Mária Uhorská",y:"1371 – 1395",r:"uhorská panovníčka",s:"Trón zdedila už ako jedenásťročná a korunovali ju za „kráľa“, nie za kráľovnú. Prežila väzenie aj vraždu vlastnej matky, neskôr vládla spolu s manželom Žigmundom Luxemburským. Zomrela mladá po páde z koňa."},
+ D:{n:"Alžbeta Piastovná",y:"1305 – 1380",r:"uhorská kráľovná",s:"Pochádzala z poľskej kráľovskej rodiny a vydala sa za uhorského kráľa Karola Róberta. Bola matkou Ľudovíta Veľkého. Svojou politikou spájala uhorský a poľský dvor, vďaka čomu jej syn získal aj poľskú korunu."},
+ M:{n:"Beatrix Aragónska",y:"1457 – 1508",r:"uhorská kráľovná",s:"Ako manželka Mateja Korvína priniesla na uhorský dvor taliansku hudbu, umenie a zvyky. Podporovala vzdelanie a nové stavby. Po Matejovej smrti sa márne snažila udržať si vplyv."},
+ V:{n:"Svätá Alžbeta Uhorská",y:"1207 – 1231",r:"uhorská princezná, pomocníčka chudobných",s:"Bola dcérou kráľa Ondreja II. a vydala sa do Nemecka. Starala sa o chudobných a chorých, zakladala útulky a po manželovej smrti žila skromne. Za svätú ju vyhlásili už v roku 1235. V Košiciach nesie jej meno Dóm sv. Alžbety, najväčší kostol na Slovensku."}
+},
+3:{
+ O:{n:"Ján Jiskra z Brandýsa",y:"asi 1400 – 1469",r:"vojenský veliteľ",s:"Velil vojakom, ktorí v 40. a 50. rokoch 15. storočia ovládali mnoho miest a hradov na strednom a východnom Slovensku. Dlhé roky bojoval proti Jánovi Huňadymu. Jeho príbeh ukazuje, aké nepokojné boli časy po smrti kráľa Albrechta II."},
+ V:{n:"Andrej Svorad",y:"11. storočie",r:"pustovník a mních",s:"Žil v samote na hore Zobor pri Nitre ako pustovník, teda človek, ktorý sa utiahol od sveta, aby sa mohol modliť. Po smrti ho začali ctiť ako svätého. Je to jeden z najstarších svätcov, ktorí žili na našom území."},
+ M:{n:"Konštantín (Cyril)",y:"826/827 – 869",r:"učiteľ a tvorca písma",s:"Vytvoril hlaholiku, prvé slovanské písmo, a prekladal biblické texty do reči, ktorej ľudia rozumeli. Na Veľkú Moravu prišiel v roku 863 spolu s bratom Metodom. Zomrel v Ríme, kde vstúpil do kláštora a prijal meno Cyril."},
+ D:{n:"Metod",y:"asi 815 – 885",r:"učiteľ a arcibiskup",s:"Po bratovej smrti pokračoval v ich práci a obhajoval slovanskú bohoslužbu pred pápežom aj pred odporcami. Zažil väzenie a odpor, no jeho dielo zachránili žiaci, ktorí slovanské písmo šírili ďalej."},
+ T:{n:"Majster Pavol z Levoče",y:"asi 1460 – 1537",r:"rezbár a sochár",s:"Jeho Oltár sv. Jakuba v Levoči (dokončený v roku 1517) je vysoký takmer 19 metrov a je najvyšší gotický drevený oltár na svete. Vznikal roky trpezlivej práce. Levoča je dnes na zozname svetového dedičstva UNESCO."}
+},
+4:{
+ O:{n:"Helena Kottannerová",y:"15. storočie",r:"komorná kráľovnej",s:"Bola osobnou služobníčkou kráľovnej Alžbety Luxemburskej. V roku 1440 pomohla ukradnúť uhorskú korunu z Visegrádu, aby mohol byť korunovaný malý Ladislav Pohrobok, ktorý sa narodil v Komárne. Celý príbeh spísala sama, a vďaka tomu vieme, čo sa naozaj stalo."},
+ V:{n:"Klára z Hlohovca",y:"neskorý stredovek",r:"šľachtičná, ktorá založila špitál",s:"Spolu s manželom Mikulášom Kontom založila v Hlohovci špitál Svätého Ducha, teda útulok pre chudobných a chorých. Po jeho smrti ostala vyše tridsať rokov vdovou a svojím odkazom pomohla špitálu prežiť."},
+ D:{n:"Hedviga z Marcali",y:"15. storočie",r:"šľachtičná, ktorá viedla majetky",s:"V rokoch 1434 – 1439 spravovala majetky po svojom manželovi Petrovi zo Svätého Jura a Pezinka a starala sa o záležitosti svojich maloletých synov. Zachovali sa jej listy mestu Prešporok, v ktorých riešila praktické veci aj správy z kráľovského dvora."},
+ M:{n:"Katarína z Prešporku",y:"15. storočie",r:"mešťanka z Bratislavy",s:"Z roku 1442 sa zachoval list, z ktorého vidno, že vedela čítať aj písať. Pre historikov je to vzácny dôkaz, že aj niektoré ženy zo stredovekých miest boli gramotné."},
+ T:{n:"Marta Forgáčová",y:"neskorý stredovek",r:"šľachtičná, ktorá viedla panstvo",s:"Po smrti manžela Mikuláša Forgáča, ktorý padol v boji proti Osmanom, viedla majetky za svojich malých synov. Bola prísna a dôsledná hospodárka. Keď synovia dospeli, vzbúrili sa proti nej, pretože im statky odmietla odovzdať."}
+}};
+
+var CHRON = {
+ O:"Tvoje rozhodnutia najčastejšie ukazovali odvahu. V ťažkých chvíľach si nečakal{a} a konal{a} si hneď.",
+ M:"Tvoje rozhodnutia najčastejšie ukazovali rozvahu. Najprv si zisťoval{a}, ako sa veci naozaj majú, a až potom si sa rozhodoval{a}.",
+ D:"Tvoje rozhodnutia najčastejšie ukazovali schopnosť dohodnúť sa. Spájal{a} si ľudí a spory si riešil{a} rozhovorom.",
+ V:"Tvoje rozhodnutia najčastejšie ukazovali silnú vieru a zmysel pre svedomie. Oporu si hľadal{a} vo viere a v spoločných hodnotách.",
+ T:"Tvoje rozhodnutia najčastejšie ukazovali vytrvalosť. Budoval{a} si trpezlivo, krok za krokom."
+};
+
+/* ---------- Pomocné ---------- */
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function shuffle(a){ var b=a.slice(); for(var i=b.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=b[i]; b[i]=b[j]; b[j]=t; } return b; }
+function roleOf(g,s){ return g==="m" ? (s==="r"?1:3) : (s==="r"?2:4); }
+function lsGet(k){ try{ return localStorage.getItem(k)||""; }catch(e){ return ""; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function compute(ans){
+  var counts={O:0,M:0,D:0,V:0,T:0}, last={O:-1,M:-1,D:-1,V:-1,T:-1};
+  ans.forEach(function(t,i){ if(counts[t]!==undefined){ counts[t]++; last[t]=i; } });
+  var order=TR.slice().sort(function(a,b){ return counts[b]-counts[a] || last[b]-last[a]; });
+  return {counts:counts,top:order[0],second:order[1],order:order};
+}
+function barsHTML(counts,total){
+  return TR.map(function(t){
+    var pct=Math.round(counts[t]/total*100);
+    return '<div class="bar" data-t="'+t+'"><span>'+TN[t]+'</span><span class="tr"><b style="width:'+pct+'%"></b></span><span class="v">'+counts[t]+'/'+total+'</span></div>';
+  }).join("");
+}
+
+/* ---------- Stav hry ---------- */
+var S={gender:null,status:null,qi:0,ans:[],fb:"0",role:0,name:"",screen:"s-start"};
+var SCREENS=["s-start","s-travel","s-q","s-result","s-teacher"];
+function show(id){
+  SCREENS.forEach(function(s){ $(s).hidden = (s!==id); });
+  if(id!=="s-teacher"){ S.screen=id; }
+  window.scrollTo(0,0);
+}
+
+/* ---------- Štart ---------- */
+function readStart(){
+  var g=document.querySelector('input[name="gender"]:checked');
+  var s=document.querySelector('input[name="status"]:checked');
+  S.gender=g?g.value:null; S.status=s?s.value:null;
+  $("fs-status").disabled=!S.gender;
+  if(S.gender==="f"){ $("lab-r").textContent="Panovníčka"; $("lab-c").textContent="Obyčajná žena"; }
+  else if(S.gender==="m"){ $("lab-r").textContent="Panovník"; $("lab-c").textContent="Obyčajný muž"; }
+  $("go").disabled=!(S.gender&&S.status);
+}
+Array.prototype.forEach.call(document.querySelectorAll('input[name="gender"],input[name="status"]'),function(i){ i.addEventListener("change",readStart); });
+
+/* ---------- Presun v čase ---------- */
+var anim=null;
+function startTravel(){
+  S.role=roleOf(S.gender,S.status);
+  S.name=$("nick").value.trim();
+  var r=ROLE[S.role];
+  $("tr-badge").textContent=r.label;
+  $("tr-text").textContent=r.text;
+  $("tr-era").textContent="Presun v čase";
+  $("enter").disabled=true;
+  show("s-travel");
+  var yr=$("tr-year");
+  var reduce=window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function done(){ yr.textContent="Stredovek"; yr.style.fontSize="clamp(2.6rem,14vw,4.6rem)"; $("tr-era").textContent="9. – 15. storočie · dnešné Slovensko"; $("enter").disabled=false; }
+  yr.style.fontSize="";
+  if(reduce){ done(); return; }
+  var t0=null, from=2026, to=900, dur=1900;
+  if(anim){ cancelAnimationFrame(anim); }
+  function step(ts){
+    if(t0===null){ t0=ts; }
+    var p=Math.min(1,(ts-t0)/dur);
+    var e=1-Math.pow(1-p,3);
+    yr.textContent=String(Math.round(from-(from-to)*e));
+    if(p<1){ anim=requestAnimationFrame(step); } else { done(); }
+  }
+  yr.textContent=String(from);
+  anim=requestAnimationFrame(step);
+}
+
+/* ---------- Otázky ---------- */
+function renderQ(){
+  var set=Q[ROLE[S.role].group];
+  var q=set[S.qi];
+  $("q-roman").textContent=ROMAN[S.qi];
+  $("q-count").textContent="Rozhodnutie "+(S.qi+1)+" z "+NQ;
+  var tr=""; for(var i=0;i<NQ;i++){ tr+='<i class="'+(i<S.qi?"done":(i===S.qi?"now":""))+'"></i>'; }
+  $("q-track").innerHTML=tr;
+  $("q-text").textContent=q.s;
+  var box=$("q-opts"); box.innerHTML="";
+  shuffle(q.o).forEach(function(o,i){
+    var b=document.createElement("button");
+    b.type="button"; b.className="opt";
+    b.innerHTML='<span class="l">'+"ABCD"[i]+'</span><span></span>';
+    b.lastChild.textContent=o.x;
+    b.addEventListener("click",function(){ pick(o.t,b); });
+    box.appendChild(b);
+  });
+}
+var locked=false;
+function pick(t,btn){
+  if(locked){ return; }
+  locked=true; btn.classList.add("chosen");
+  setTimeout(function(){
+    S.ans.push(t); S.qi++; locked=false;
+    if(S.qi>=NQ){ finish(); } else { renderQ(); window.scrollTo(0,0); }
+  },180);
+}
+
+/* ---------- Výsledok ---------- */
+function cleanName(n){
+  return n.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9 ]/g,"").trim().replace(/ +/g,"_").slice(0,14);
+}
+function codeStr(){
+  return "v1."+S.role+"."+S.ans.join("")+"."+S.fb+(S.name?"."+cleanName(S.name):"");
+}
+function finish(){
+  var c=compute(S.ans), per=P[S.role][c.top], f=(S.gender==="f");
+  $("r-eyebrow").textContent="Bojoval"+(f?"a":"")+" si ako";
+  $("r-name").textContent=per.n;
+  $("r-meta").textContent=per.y+" · "+per.r;
+  $("r-stopa").textContent=per.s;
+  $("r-tvoja").textContent=CHRON[c.top].replace(/\{a\}/g,f?"a":"")+" Na druhom mieste bola "+TL[c.second]+". Preto ti najviac sedí "+per.n+".";
+  $("r-bars").innerHTML=barsHTML(c.counts,NQ);
+  $("fb-a").classList.remove("on"); $("fb-n").classList.remove("on");
+  $("fb-note").textContent="";
+  $("copy-note").textContent="";
+  $("r-code").textContent=codeStr();
+  show("s-result");
+}
+function setFb(v){
+  S.fb=v;
+  $("fb-a").classList.toggle("on",v==="A");
+  $("fb-n").classList.toggle("on",v==="N");
+  $("fb-note").textContent="Ďakujeme za spätnú väzbu.";
+  $("r-code").textContent=codeStr();
+}
+$("fb-a").addEventListener("click",function(){ setFb("A"); });
+$("fb-n").addEventListener("click",function(){ setFb("N"); });
+$("copy").addEventListener("click",function(){
+  var text=$("r-code").textContent;
+  function fallback(){
+    try{ var r=document.createRange(); r.selectNodeContents($("r-code")); var sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(r); }catch(e){}
+    $("copy-note").textContent="Kód je označený. Skopíruj ho ručne.";
+  }
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ $("copy-note").textContent="Kód je skopírovaný."; },fallback);
+    } else { fallback(); }
+  }catch(e){ fallback(); }
+});
+$("again").addEventListener("click",function(){
+  S.qi=0; S.ans=[]; S.fb="0";
+  Array.prototype.forEach.call(document.querySelectorAll('input[type="radio"]'),function(i){ i.checked=false; });
+  $("nick").value=""; readStart(); show("s-start");
+});
+$("go").addEventListener("click",function(){ S.qi=0; S.ans=[]; S.fb="0"; startTravel(); });
+$("enter").addEventListener("click",function(){ S.qi=0; S.ans=[]; renderQ(); show("s-q"); });
+
+/* ---------- Učiteľ ---------- */
+var CODE_RE=/^v1\.([1-4])\.([OMDVTomdvt]{15})\.([AN0])(?:\.(.*))?$/;
+function parseCodes(text){
+  var recs=[], bad=0;
+  text.split(/\s+/).forEach(function(tok){
+    if(!tok){ return; }
+    var m=CODE_RE.exec(tok);
+    if(!m){ bad++; return; }
+    recs.push({role:+m[1],ans:m[2].toUpperCase().split(""),fb:m[3],name:(m[4]||"").replace(/_/g," ")});
+  });
+  return {recs:recs,bad:bad};
+}
+function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; var t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function demoRecs(){
+  var r=rng(2026), names=["Adam","Eva","Samuel","Nina","Tomáš","Lea","Martin","Júlia","Filip","Sára","Dávid","Ema","Jakub","Mia","Peter","Lenka"];
+  var out=[];
+  for(var i=0;i<names.length;i++){
+    var role=1+Math.floor(r()*4), g=ROLE[role].group, ans=[];
+    for(var q=0;q<NQ;q++){ var o=Q[g][q].o; ans.push(o[Math.floor(r()*o.length)].t); }
+    var x=r(); out.push({role:role,ans:ans,fb:x<0.72?"A":(x<0.9?"N":"0"),name:names[i]});
+  }
+  return out;
+}
+function pct(a,b){ return b? Math.round(a/b*100) : 0; }
+function renderReport(recs,isDemo){
+  var n=recs.length, el=$("report");
+  if(!n){ el.innerHTML='<p class="muted">Zatiaľ tu nie sú žiadne platné kódy.</p>'; return; }
+  var html="";
+  if(isDemo){ html+='<div class="demo"><b>Ukážkové údaje.</b> Takto bude vyzerať prehľad. Keď vložíte kódy žiakov, ukážka zmizne.</div>'; }
+
+  var roleCnt={1:0,2:0,3:0,4:0}, perCnt={}, trait={O:0,M:0,D:0,V:0,T:0}, fbA=0, fbN=0, fb0=0, rows=[];
+  recs.forEach(function(rc){
+    roleCnt[rc.role]++;
+    var c=compute(rc.ans), per=P[rc.role][c.top];
+    var key=per.n; perCnt[key]=(perCnt[key]||0)+1;
+    TR.forEach(function(t){ trait[t]+=c.counts[t]; });
+    if(rc.fb==="A"){fbA++;} else if(rc.fb==="N"){fbN++;} else {fb0++;}
+    rows.push({name:rc.name||"–",role:ROLE[rc.role].label,per:per.n,top:TN[c.top],fb:rc.fb==="A"?"Páčila":(rc.fb==="N"?"Nepáčila":"–")});
+  });
+
+  html+='<div class="block"><h3>Prehľad</h3><p>Vyhodnotených žiakov: <b>'+n+'</b>. Aktivita sa páčila <b>'+pct(fbA,n)+' %</b>, nepáčila <b>'+pct(fbN,n)+' %</b>'+(fb0?', bez odpovede '+pct(fb0,n)+' %':'')+'.</p>';
+  var tot=n*NQ, ord=TR.slice().sort(function(a,b){ return trait[b]-trait[a]; });
+  html+='<p>Najčastejšie sa volila <b>'+TL[ord[0]]+'</b> ('+pct(trait[ord[0]],tot)+' % rozhodnutí), najzriedkavejšie <b>'+TL[ord[4]]+'</b> ('+pct(trait[ord[4]],tot)+' %).</p></div>';
+
+  html+='<div class="block"><h3>Zvolené roly</h3><div class="rows">';
+  [1,2,3,4].forEach(function(k){ html+='<div class="rowline"><span>'+ROLE[k].label+'</span><span class="tr"><b style="width:'+pct(roleCnt[k],n)+'%"></b></span><span class="v">'+roleCnt[k]+'</span></div>'; });
+  html+='</div></div>';
+
+  html+='<div class="block"><h3>Výsledné osobnosti</h3><div class="rows">';
+  Object.keys(perCnt).sort(function(a,b){ return perCnt[b]-perCnt[a]; }).forEach(function(k){ html+='<div class="rowline"><span>'+esc(k)+'</span><span class="tr"><b style="width:'+pct(perCnt[k],n)+'%"></b></span><span class="v">'+perCnt[k]+'</span></div>'; });
+  html+='</div></div>';
+
+  var avg={}; TR.forEach(function(t){ avg[t]=Math.round(trait[t]/n*10)/10; });
+  html+='<div class="block"><h3>Priemerný profil rozhodnutí</h3><div class="bars">'+TR.map(function(t){
+    return '<div class="bar" data-t="'+t+'"><span>'+TN[t]+'</span><span class="tr"><b style="width:'+Math.round(avg[t]/NQ*100)+'%"></b></span><span class="v">'+String(avg[t]).replace(".",",")+'</span></div>';
+  }).join("")+'</div><p class="muted" style="font-size:.9rem">Priemerný počet rozhodnutí z 15, ktoré smerovali k danej vlastnosti.</p></div>';
+
+  [["r","Rozhodnutia panovníkov a panovníčok",[1,2]],["c","Rozhodnutia obyčajných ľudí",[3,4]]].forEach(function(grp){
+    var g=grp[0], sub=recs.filter(function(rc){ return grp[2].indexOf(rc.role)>=0; });
+    if(!sub.length){ return; }
+    html+='<div class="block"><h3>'+grp[1]+' ('+sub.length+')</h3><p class="muted" style="font-size:.9rem">Rozbaľte otázku a uvidíte, ako sa rozdelili odpovede.</p>';
+    Q[g].forEach(function(q,qi){
+      var cnt={}; q.o.forEach(function(o){ cnt[o.t]=0; });
+      sub.forEach(function(rc){ if(cnt[rc.ans[qi]]!==undefined){ cnt[rc.ans[qi]]++; } });
+      var best=q.o.slice().sort(function(a,b){ return cnt[b.t]-cnt[a.t]; })[0];
+      html+='<details><summary>'+ROMAN[qi]+'. '+esc(q.s)+'</summary>';
+      q.o.forEach(function(o){
+        html+='<div class="qrow"><div class="t"><span class="chip" data-t="'+o.t+'">'+TN[o.t]+'</span><span>'+esc(o.x)+'</span></div>'
+          +'<div class="rowline" style="grid-template-columns:1fr 70px"><span class="tr"><b style="width:'+pct(cnt[o.t],sub.length)+'%;'+(o===best?'':'opacity:.55')+'"></b></span><span class="v">'+cnt[o.t]+' ('+pct(cnt[o.t],sub.length)+' %)</span></div></div>';
+      });
+      html+='</details>';
+    });
+    html+='</div>';
+  });
+
+  html+='<div class="block"><h3>Zoznam žiakov</h3><div class="tablewrap"><table><thead><tr><th>Prezývka</th><th>Rola</th><th>Osobnosť</th><th>Dominantná vlastnosť</th><th>Spätná väzba</th></tr></thead><tbody>';
+  rows.forEach(function(r){ html+='<tr><td>'+esc(r.name)+'</td><td>'+esc(r.role)+'</td><td>'+esc(r.per)+'</td><td>'+esc(r.top)+'</td><td>'+esc(r.fb)+'</td></tr>'; });
+  html+='</tbody></table></div></div>';
+  el.innerHTML=html;
+}
+var tmr=null;
+function refresh(){
+  var text=$("codes").value;
+  lsSet("osudy.codes",text);
+  var p=parseCodes(text);
+  if(!text.trim()){
+    $("codes-note").textContent="Zatiaľ nie sú vložené žiadne kódy, preto vidíte ukážku.";
+    renderReport(demoRecs(),true);
+  } else {
+    $("codes-note").textContent="Platných kódov: "+p.recs.length+(p.bad?". Nerozpoznaných riadkov: "+p.bad+".":".");
+    renderReport(p.recs,false);
+  }
+}
+$("codes").addEventListener("input",function(){ clearTimeout(tmr); tmr=setTimeout(refresh,250); });
+
+/* QR kód */
+var qrBig=false;
+function makeQR(){
+  var box=$("qrbox"), text=$("link").value.trim();
+  lsSet("osudy.link",text);
+  box.innerHTML="";
+  if(!text){ box.textContent="Vložte odkaz."; return; }
+  if(typeof QRCode==="undefined"){ box.textContent="QR kód sa nepodarilo načítať. Použite odkaz."; return; }
+  var size=qrBig?300:200;
+  try{
+    new QRCode(box,{text:text,width:size,height:size,colorDark:"#000000",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});
+  }catch(e){ box.textContent="QR kód sa nepodarilo vytvoriť. Skontrolujte odkaz."; }
+}
+$("qr-make").addEventListener("click",makeQR);
+$("qr-big").addEventListener("click",function(){ qrBig=!qrBig; this.textContent=qrBig?"Menší QR kód":"Väčší QR kód"; makeQR(); });
+$("link").addEventListener("change",makeQR);
+
+var teacherReady=false;
+function initTeacher(){
+  if(teacherReady){ return; }
+  teacherReady=true;
+  var link=lsGet("osudy.link")||DEFAULT_LINK||(location.href||"").split("#")[0];
+  $("link").value=link;
+  $("codes").value=lsGet("osudy.codes");
+  makeQR(); refresh();
+}
+
+/* ---------- Smerovanie ---------- */
+function route(){
+  if(location.hash==="#ucitel"){ initTeacher(); show("s-teacher"); }
+  else { show(S.screen); }
+}
+window.addEventListener("hashchange",route);
+readStart();
+route();
+})();
+</script>
+
+</body></html>
